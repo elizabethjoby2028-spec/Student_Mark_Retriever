@@ -44,11 +44,13 @@ public class MainActivity extends AppCompatActivity {
             }
 
             if (dbHelper.addStudent(name, marks)) {
+
                 Toast.makeText(this, "Student added",
                         Toast.LENGTH_SHORT).show();
 
                 etName.setText("");
                 etMarks.setText("");
+
             } else {
                 Toast.makeText(this, "Failed to add student",
                         Toast.LENGTH_SHORT).show();
@@ -57,15 +59,9 @@ public class MainActivity extends AppCompatActivity {
 
         btnDisplay.setOnClickListener(v -> {
 
-            String name = etName.getText().toString().trim();
+            String students = dbHelper.getAllStudents();
+            tvNames.setText(students);
 
-            if (name.isEmpty()) {
-                etName.setError("Enter student name");
-                return;
-            }
-
-            String result = dbHelper.getStudentMarks(name);
-            tvNames.setText(result);
         });
     }
 

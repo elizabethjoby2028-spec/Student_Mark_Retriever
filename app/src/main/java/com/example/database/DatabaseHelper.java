@@ -14,7 +14,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
         db.execSQL(
                 "CREATE TABLE Students (" +
                         "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -26,6 +25,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db,
                           int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS Students");
+        onCreate(db);
     }
 
     public boolean addStudent(String name, String marks) {
@@ -41,14 +42,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result != -1;
     }
 
-    public String getStudentMarks(String name) {
+    public String getAllStudents() {
 
         SQLiteDatabase db = getReadableDatabase();
 
         Cursor cursor = db.rawQuery(
-                "SELECT sname, marks FROM Students WHERE sname = ?",
-                new String[]{name}
-        );
+                "SELECT sname, marks FROM Students", null);
 
         StringBuilder result = new StringBuilder();
 
@@ -66,7 +65,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         if (result.length() == 0) {
-            return "No student found";
+            return "No students found";
         }
 
         return result.toString();
